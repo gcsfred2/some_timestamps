@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timestamp Logger</title>
+    <title>Goalkeeper Save Logger</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +21,22 @@
             flex-direction: column;
             gap: 16px;
             margin-bottom: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         #redButton {
@@ -47,6 +63,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.2s;
+            margin-top: 10px;
         }
         
         #whiteButton:hover {
@@ -106,12 +123,35 @@
 </head>
 <body>
     <div class="button-container">
-        <button id="redButton">Add Timestamp</button>
+        <div class="checkbox-group">
+            <div class="checkbox-item">
+                <input type="checkbox" id="niceSave" name="saveType" value="Nice save">
+                <label for="niceSave">Nice save</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="excellentSave" name="saveType" value="Excellent save">
+                <label for="excellentSave">Excellent save</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="audacious" name="saveType" value="Audacious">
+                <label for="audacious">Audacious</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="footwork" name="saveType" value="Footwork">
+                <label for="footwork">Footwork</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="penalty" name="saveType" value="Penalty">
+                <label for="penalty">Penalty</label>
+            </div>
+        </div>
+        
+        <button id="redButton">Log Save</button>
         <button id="whiteButton">Clear Log</button>
         <button id="downloadButton">Download Log</button>
     </div>
     
-    <div class="log-label">Event Log:</div>
+    <div class="log-label">Save Log:</div>
     <textarea id="logText" readonly></textarea>
     
     <div id="copyNotification" class="copy-notification">Text copied to clipboard!</div>
@@ -122,20 +162,38 @@
         const downloadButton = document.getElementById('downloadButton');
         const logText = document.getElementById('logText');
         const copyNotification = document.getElementById('copyNotification');
+        const checkboxes = document.querySelectorAll('input[name="saveType"]');
         
-        // Add timestamp when red button is clicked
+        // Add save entry when red button is clicked
         redButton.addEventListener('click', () => {
             const now = new Date();
             const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
             
+            // Get selected checkbox values
+            const selected = [];
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    selected.push(checkbox.value);
+                }
+            });
+            
+            // Create log entry
+            const saveTypes = selected.length > 0 ? selected.join(', ') : 'No type selected';
+            const logEntry = `${timestamp} - ${saveTypes}`;
+            
             if (logText.value) {
-                logText.value += '\n' + timestamp;
+                logText.value += '\n' + logEntry;
             } else {
-                logText.value = timestamp;
+                logText.value = logEntry;
             }
             
             // Auto-scroll to bottom
             logText.scrollTop = logText.scrollHeight;
+            
+            // Uncheck all checkboxes after logging
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
         });
         
         // Clear log when white button is clicked
@@ -154,7 +212,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `timestamp-log-${new Date().toISOString().substring(0, 10)}.txt`;
+            a.download = `saves-log-${new Date().toISOString().substring(0, 10)}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
