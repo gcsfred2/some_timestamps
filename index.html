@@ -187,7 +187,7 @@
             });
             
             // Create log entry
-            const saveTypes = selected.length > 0 ? selected.join(', ') : 'No type selected';
+            const saveTypes = selected.length > 0 ? selected.join(', ') : ' - ';
             const logEntry = `${timestamp} - ${saveTypes}`;
             
             if (logText.value) {
