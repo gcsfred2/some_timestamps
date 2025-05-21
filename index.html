@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Goalkeeper Save Logger</title>
+    <title>GK Game Log</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -140,18 +140,27 @@
                 <input type="checkbox" id="footwork" name="saveType" value="Footwork">
                 <label for="footwork">Footwork</label>
             </div>
+            <br/>
             <div class="checkbox-item">
                 <input type="checkbox" id="penalty" name="saveType" value="Penalty">
                 <label for="penalty">Penalty</label>
             </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="Precision" name="saveType" value="Precision">
+                <label for="Precision">Precision</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="Reflex" name="saveType" value="Reflex">
+                <label for="Reflex">Reflex</label>
+            </div>
         </div>
         
-        <button id="redButton">Log Save</button>
+        <button id="redButton">Log It</button>
         <button id="whiteButton">Clear Log</button>
         <button id="downloadButton">Download Log</button>
     </div>
     
-    <div class="log-label">Save Log:</div>
+    <div class="log-label">Game Log:</div>
     <textarea id="logText" readonly></textarea>
     
     <div id="copyNotification" class="copy-notification">Text copied to clipboard!</div>
