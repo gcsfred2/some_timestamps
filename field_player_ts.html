@@ -180,7 +180,7 @@
         // Add save entry when red button is clicked
         redButton.addEventListener('click', () => {
             const now = new Date();
-            const timestamp = now.toISOString().replace('T', ' ').substring(0, 19);
+            const timestamp = now.toLocaleString('en-CA').replace('T', ' ').substring(0, 19);
             
             // Get selected checkbox values
             const selected = [];
