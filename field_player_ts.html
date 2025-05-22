@@ -39,6 +39,24 @@
             gap: 5px;
         }
         
+        .notes-container {
+            margin-bottom: 15px;
+        }
+        
+        .notes-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        #notesInput {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
         #redButton {
             background-color: #ff0000;
             color: white;
@@ -125,24 +143,24 @@
     <div class="button-container">
         <div class="checkbox-group">
             <div class="checkbox-item">
-                <input type="checkbox" id="niceSave" name="saveType" value="Goal">
-                <label for="niceSave">Goal</label>
+                <input type="checkbox" id="Goal" name="saveType" value="Goal">
+                <label for="Goal">Goal</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="excellentSave" name="saveType" value="Assist">
-                <label for="excellentSave">Assist</label>
+                <input type="checkbox" id="Assist" name="saveType" value="Assist">
+                <label for="Assist">Assist</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="audacious" name="saveType" value="Dribble">
-                <label for="audacious">Dribble</label>
+                <input type="checkbox" id="Dribble" name="saveType" value="Dribble">
+                <label for="Dribble">Dribble</label>
             </div>
             <div class="checkbox-item">
                 <input type="checkbox" id="FreeKick" name="saveType" value="Free kick">
                 <label for="FreeKick">Free kick</label>
             </div>
             <div class="checkbox-item">
-                <input type="checkbox" id="penalty" name="saveType" value="Defence">
-                <label for="penalty">Defence</label>
+                <input type="checkbox" id="Defence" name="saveType" value="Defence">
+                <label for="Defence">Defence</label>
             </div>
             <br/>
             <div class="checkbox-item">
@@ -163,6 +181,11 @@
             </div>
         </div>
         
+        <div class="notes-container">
+            <label for="notesInput">Notes:</label>
+            <input type="text" id="notesInput" placeholder="Enter additional notes...">
+        </div>
+        
         <button id="redButton">Log It</button>
         <button id="whiteButton">Clear Log</button>
         <button id="downloadButton">Download Log</button>
@@ -180,6 +203,7 @@
         const logText = document.getElementById('logText');
         const copyNotification = document.getElementById('copyNotification');
         const checkboxes = document.querySelectorAll('input[name="saveType"]');
+        const notesInput = document.getElementById('notesInput');
         
         // Add save entry when red button is clicked
         redButton.addEventListener('click', () => {
@@ -194,9 +218,17 @@
                 }
             });
             
+            // Get notes text
+            const notes = notesInput.value.trim();
+            
             // Create log entry
             const saveTypes = selected.length > 0 ? selected.join(', ') : ' - ';
-            const logEntry = `${timestamp} - ${saveTypes}`;
+            let logEntry = `${timestamp} - ${saveTypes}`;
+            
+            // Add notes if they exist
+            if (notes) {
+                logEntry += ` - ${notes}`;
+            }
             
             if (logText.value) {
                 logText.value += '\n' + logEntry;
@@ -207,10 +239,11 @@
             // Auto-scroll to bottom
             logText.scrollTop = logText.scrollHeight;
             
-            // Uncheck all checkboxes after logging
+            // Uncheck all checkboxes and clear notes after logging
             checkboxes.forEach(checkbox => {
                 checkbox.checked = false;
             });
+            notesInput.value = '';
         });
         
         // Clear log when white button is clicked
@@ -229,7 +262,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `saves-log-${new Date().toISOString().substring(0, 10)}.txt`;
+            a.download = `field-player-log-${new Date().toISOString().substring(0, 10)}.txt`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
